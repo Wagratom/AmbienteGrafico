@@ -1,0 +1,192 @@
+name: plugin-teste
+description: teste de plugin
+display-name: plugin-teste
+picture: plugin.png
+category: backend # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/plugin/#category
+compatibility:
+  - java
+  - spring
+about: docs/about.md
+usage: docs/usage.md
+use-case: docs/use-case.md
+implementation: docs/implementation.md
+technologies: # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/yaml/#technologies
+  - "Api"
+types:
+  - app
+
+###############################################################################
+#                             Para criar o makefile                           #
+###############################################################################
+inputs:
+
+  - label: Quero um makefile pré configurado?
+    type: text
+    name: makefile
+    items:
+      - sim
+      - nao
+
+  - label: Como você quer compilar?
+    type: text
+    name: cc
+    items:
+      - gcc
+      - g++
+      - clang
+      - clang++
+    condition:
+      variable: makefile
+      operator: "=="
+      value: sim
+
+  - label: Quais flags você quer usar?
+    type: text
+    name: cflags
+    default: -Wall -Wextra -Werror -g3
+    condition:
+      variable: makefile
+      operator: "=="
+      value: sim
+
+  - label: Caminho dos objetos?
+    type: text
+    name: obj_dir
+    default: objs
+    condition:
+      variable: makefile
+      operator: "=="
+      value: sim
+
+  - label: Printar Hello world para da sorte XD?
+    type: text
+    name: welcome
+    default: Hello World
+    condition:
+      variable: makefile
+      operator: "=="
+      value: sim
+################################################################################
+#                             Pegar a versão do wsl
+################################################################################
+  - label: Qual a versão do seu wsl?
+    type: text
+    name: wsl
+    items:
+      - wsl1
+      - wsl2
+
+###############################################################################
+#                          Para adicionar a libft
+###############################################################################
+  - label: Quer adicionar a libft?
+    type: text
+    name: libft
+    items:
+      - sim
+      - nao
+
+  - label: Repositorio libft
+    type: text
+    name: repo_libft
+    default: git@github.com:Wagratom/42_libft.git
+    condition:
+      variable: libft
+      operator: "=="
+      value: sim
+
+###############################################################################
+#                             Para criar a main                               #
+###############################################################################
+
+hooks:
+  - type: edit
+    trigger: after-render
+    path: "src/main.c" # a partir do terminal
+    changes:
+      - insert:
+          line: 0
+          snippet: "./snippet/main.c"
+          when:
+            not-exists-snippet: "./snippet/main.c" # em referencia ao plugin
+
+  - type: edit
+    trigger: after-render
+    path: "includes/{{name_project}}.h"
+    changes:
+      - search:
+          string: "# define {{name_project|upper}}_H"
+          insert-after:
+            value: "#include <stdio.h>\n"
+          when:
+            not-exists: "#include <stdio.h>\n"
+
+###############################################################################
+#                     Para criar o makefile configurado
+###############################################################################
+  - type: edit
+    trigger: after-render
+    path: "Makefile"
+    changes:
+      - insert:
+          line: 0
+          snippet: "./snippet/makefile"
+          when:
+            not-exists-snippet: "./snippet/makefile"
+
+###############################################################################
+#                           Clones e configuração
+###############################################################################
+  - type: run
+    trigger: after-render
+    condition:
+      variable: libft
+      operator: "=="
+      value: sim
+    commands:
+      - git clone {{inputs.repo_libft}} libft
+
+  - type: edit
+    trigger: after-render
+    path: "includes/{{name_project}}.h"
+    condition:
+      variable: libft
+      operator: "=="
+      value: sim
+    changes:
+      - search:
+          string: "# define {{name_project|upper}}_H"
+          insert-after:
+            value: "#include \"../libft/libft.h\"\n"
+          when:
+            not-exists: "#include \"libft.h\"\n"
+
+  - type: run-script
+    trigger: after-render
+    condition:
+      variable: wsl
+      operator: "=="
+      value: wsl1
+    script: ./script/wsl1.py
+
+  - type: run-script
+    trigger: after-render
+    condition:
+      variable: wsl
+      operator: "=="
+      value: wsl2
+    script: ./script/wsl2.py
+
+
+###############################################################################
+#                       Para rodar a main
+###############################################################################
+  - type: run
+    trigger: after-render
+    condition:
+      variable: makefile
+      operator: "=="
+      value: sim
+    commands:
+      - make
+      - ./{{name_project}}

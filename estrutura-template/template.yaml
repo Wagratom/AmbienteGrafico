@@ -1,0 +1,10 @@
+name: template-teste
+description: teste
+types:
+  - app-template
+inputs:
+  - label: Project name
+    type: text
+    name: name_project
+    global: true
+    default: Cub3d

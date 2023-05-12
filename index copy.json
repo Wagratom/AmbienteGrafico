@@ -1,0 +1,25 @@
+{
+  "stack_name": "stack-grafica",
+  "stack_type": "local",
+  "stack_path": "/home/wallas/Sport/teste/stack-grafica",
+  "stack_remote": [],
+  "plugins": {
+    "plugin-teste": {
+      "description": "teste de plugin",
+      "types": [
+        "app"
+      ],
+      "path": "/home/wallas/.stk/stacks/stack-grafica/plugin-teste",
+      "latest_version": "No release"
+    },
+    "template-teste": {
+      "description": "teste",
+      "types": [
+        "app-template"
+      ],
+      "path": "/home/wallas/.stk/stacks/stack-grafica/template-teste",
+      "latest_version": "No release"
+    }
+  },
+  "tasks": {}
+}

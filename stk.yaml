@@ -1,0 +1,28 @@
+applied_templates:
+- inputs: {}
+  template_data_path: ''
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+- inputs:
+    example: any text
+  template_data_path: /plugin-teste
+global_computed_inputs: {}
+global_inputs: {}
+stack: stack-spot
+stack_type: app
