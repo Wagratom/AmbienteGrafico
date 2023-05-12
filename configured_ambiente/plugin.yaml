@@ -1,6 +1,6 @@
-name: plugin-teste
+name: configured_ambiente
 description: teste de plugin
-display-name: plugin-teste
+display-name: configured_ambiente
 picture: plugin.png
 category: backend # Ref: https://docs.stackspot.com/docs/create-stacks/yaml-files/plugin/#category
 compatibility:
